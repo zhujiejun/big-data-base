@@ -1,10 +1,10 @@
 project(':service-006') {
     dependencies {
-        // implementation project(':service-000')
-        implementation 'org.apache.spark:spark-core_2.11'
-        implementation 'org.apache.spark:spark-sql_2.11'
-        implementation 'org.apache.spark:spark-streaming_2.11'
+        compile project(':service-000')
+        implementation 'org.apache.spark:spark-core_2.12'
+        implementation 'org.apache.spark:spark-sql_2.12'
+        implementation 'org.apache.spark:spark-streaming_2.12'
         // implementation 'org.apache.spark:spark-streaming-kafka-0-10_2.11'
     }
 }
-mainClassName = 'com.zhujiejun.recomder.App006'
+mainClassName = 'com.zhujiejun.spark.App006'
