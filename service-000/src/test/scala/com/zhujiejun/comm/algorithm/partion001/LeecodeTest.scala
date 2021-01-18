@@ -28,10 +28,30 @@ class LeecodeTest {
         println(s"---------total time consumption is ${watch.elapsed(TimeUnit.MILLISECONDS)} ms.---------")
     }
 
+    // 001.两数之和
     @Test
     def twoSum(): Unit = {
-        //Leecode.twoSum01(nums = nums, target = target) foreach println
-        Leecode.twoSum02(nums = nums, target = target) foreach println
+        //Leecode.twoSum01(nums = nums, target = target) foreach println //force
+        Leecode.twoSum02(nums = nums, target = target) foreach println //map
     }
+
+    // 002.两数相加
+    def addTwoNumbers(): Unit = {}
+
+    // 003.无重复字符的最长子串
+    @Test
+    def lengthOfLongestSubstring(): Unit = {
+        println(Leecode.lengthOfLongestSubstring("consumdjshuahdirqqtryrqtysfzafhjgjhsgxgdwhahzteerxwoqhdgxgzfTption"))
+    }
+
+    // 004.寻找两个有序数组的中位数
+    @Test
+    def findMedianSortedArrays(): Unit = {
+        //二分查找
+        val median = Leecode.findMedianSortedArrays01(LeecodeUtil.geneIntArray(1, 30, 10),
+            LeecodeUtil.geneIntArray(15, 45, 15))
+        println(s"---------the median is $median----------")
+    }
+
 }
 

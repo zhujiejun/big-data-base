@@ -3,6 +3,7 @@ package com.zhujiejun.comm.algorithm.partion001
 import scala.collection.mutable
 
 object Leecode {
+    // 001.两数之和
     def twoSum01(nums: Array[Int], target: Int): Array[Int] = {
         val length = nums.length
         for (i <- 0 until length) {
@@ -15,6 +16,7 @@ object Leecode {
         Array(0)
     }
 
+    // 001.两数之和-map
     def twoSum02(nums: Array[Int], target: Int): Array[Int] = {
         val length = nums.length
         var saved: mutable.Map[Int, Int] = mutable.Map()
@@ -27,4 +29,92 @@ object Leecode {
         }
         Array(0)
     }
+
+    // 002.两数相加
+    def addTwoNumbers(l1: List[Int], l2: List[Int]): List[Int] = {
+        null
+    }
+
+    // 003.无重复字符的最长子串
+    def lengthOfLongestSubstring(s: String): Int = {
+        val n = s.length
+        // 哈希集合，记录每个字符是否出现过
+        var occ: mutable.Set[Character] = mutable.Set()
+        // 右指针，初始值为 -1，相当于我们在字符串的左边界的左侧，还没有开始移动
+        var (rk, answer) = (-1, 0)
+        for (i <- 0 until n) {
+            if (i != 0) {
+                // 左指针向右移动一格，移除一个字符
+                occ -= s.charAt(i - 1)
+            }
+            while (rk + 1 < n && !occ.contains(s.charAt(rk + 1))) {
+                // 不断地移动右指针
+                occ += s.charAt(rk + 1)
+                rk = rk + 1
+            }
+            // 第 i 到 rk 个字符是一个极长的无重复字符子串
+            answer = Math.max(answer, rk - i + 1)
+        }
+        answer
+    }
+
+    private def getKthElement(num1: Array[Int], num2: Array[Int], k: Int): Int = {
+        /* 主要思路：要找到第 k (k>1) 小的元素，那么就取 pivot1 = nums1[k/2-1] 和 pivot2 = nums2[k/2-1] 进行比较
+         * 这里的 "/" 表示整除
+         * nums1 中小于等于 pivot1 的元素有 nums1[0 .. k/2-2] 共计 k/2-1 个
+         * nums2 中小于等于 pivot2 的元素有 nums2[0 .. k/2-2] 共计 k/2-1 个
+         * 取 pivot = min(pivot1, pivot2)，两个数组中小于等于 pivot 的元素共计不会超过 (k/2-1) + (k/2-1) <= k-2 个
+         * 这样 pivot 本身最大也只能是第 k-1 小的元素
+         * 如果 pivot = pivot1，那么 nums1[0 .. k/2-1] 都不可能是第 k 小的元素。把这些元素全部 "删除"，剩下的作为新的 nums1 数组
+         * 如果 pivot = pivot2，那么 nums2[0 .. k/2-1] 都不可能是第 k 小的元素。把这些元素全部 "删除"，剩下的作为新的 nums2 数组
+         * 由于我们 "删除" 了一些元素（这些元素都比第 k 小的元素要小），因此需要修改 k 的值，减去删除的数的个数
+         */
+        var k0 = k
+        val kthElement = 0
+        var (index1, index2) = (0, 0)
+        val (length1, length2) = (num1.length, num1.length)
+        while (true) {
+            // 边界情况
+            if (index1 == length1) {
+                return num2(index2 + k0 - 1)
+            }
+            if (index2 == length2) {
+                return num2(index1 + k0 - 1)
+            }
+            if (k0 == 1) {
+                return Math.min(num1(index1), num2(index2))
+            }
+            // 正常情况
+            val half = k0 / 2
+            val newIndex1 = Math.min(index1 + half, length1) - 1
+            val newIndex2 = Math.min(index2 + half, length2) - 1
+            val pivot1 = num1(newIndex1)
+            val pivot2 = num2(newIndex2)
+            if (pivot1 <= pivot2) {
+                k0 = k0 - (newIndex1 - index1 + 1)
+                index1 = newIndex1 + 1
+            } else {
+                k0 = k0 - (newIndex2 - index2 + 1)
+                index2 = newIndex2 + 1
+            }
+        }
+        kthElement
+    }
+
+    // 004.寻找两个有序数组的中位数-二分查找
+    def findMedianSortedArrays01(num1: Array[Int], num2: Array[Int]): Double = {
+        val (length1, length2) = (num1.length, num1.length)
+        val totalLength = length1 + length2
+        if (totalLength % 2 == 1) {
+            val midIndex = totalLength / 2
+            val median = getKthElement(num1, num2, midIndex + 1)
+            median
+        } else {
+            val (midIndex1, midIndex2) = (totalLength / 2 - 1, totalLength / 2)
+            val median = (getKthElement(num1, num2, midIndex1 + 1) + getKthElement(num1, num2, midIndex2 + 1)) / 2.0
+            median
+        }
+    }
+
+    // 004.寻找两个有序数组的中位数-划分数组
 }
