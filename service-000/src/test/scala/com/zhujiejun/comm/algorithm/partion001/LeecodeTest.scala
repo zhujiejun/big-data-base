@@ -60,5 +60,12 @@ class LeecodeTest {
         println(s"---------the median is $median----------")
     }
 
+    //005.最长回文子串
+    @Test
+    def longestPalindrome(): Unit = {
+        val str1 = Leecode.longestPalindrome01(str) //动态规划
+        println(s"---------the str is $str1---------")
+    }
+
 }
 

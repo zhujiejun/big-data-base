@@ -1,5 +1,7 @@
 package com.zhujiejun.comm.algorithm.partion001
 
+import org.apache.commons.lang3.StringUtils
+
 import scala.collection.mutable
 
 object Leecode {
@@ -148,5 +150,28 @@ object Leecode {
             }
         }
         if ((length1 + length2) % 2 == 0) (median1 + median2) / 2.0 else median1
+    }
+
+    //005.最长回文子串-动态规划
+    def longestPalindrome01(s: String): String = {
+        val n = s.length()
+        val dp = Array.ofDim[Boolean](n, n)
+        var answer: String = StringUtils.EMPTY
+        for (l <- 0 until n) {
+            for (i <- 0 until n if i + l < n) {
+                val j = i + l
+                if (l == 0) {
+                    dp(i)(j) = true
+                } else if (l == 1) {
+                    dp(i)(j) = s.charAt(i) == s.charAt(j)
+                } else {
+                    dp(i)(j) = (s.charAt(i) == s.charAt(j)) && dp(i + 1)(j - 1)
+                }
+                if (dp(i)(j) && l + 1 > answer.length()) {
+                    answer = s.substring(i, i + l + 1)
+                }
+            }
+        }
+        answer
     }
 }
