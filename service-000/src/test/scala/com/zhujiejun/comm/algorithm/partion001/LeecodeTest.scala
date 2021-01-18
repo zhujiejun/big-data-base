@@ -63,7 +63,9 @@ class LeecodeTest {
     //005.最长回文子串
     @Test
     def longestPalindrome(): Unit = {
-        val str1 = Leecode.longestPalindrome01(str) //动态规划
+        //val str1 = Leecode.longestPalindrome01(str) //动态规划
+        //val str1 = Leecode.longestPalindrome02(str) //中心扩展
+        val str1 = Leecode.longestPalindrome03(str) //Manacher
         println(s"---------the str is $str1---------")
     }
 

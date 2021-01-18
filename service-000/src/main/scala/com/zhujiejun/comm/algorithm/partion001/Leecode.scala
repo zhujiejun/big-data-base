@@ -3,6 +3,7 @@ package com.zhujiejun.comm.algorithm.partion001
 import org.apache.commons.lang3.StringUtils
 
 import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 
 object Leecode {
     //001.两数之和-force
@@ -173,5 +174,81 @@ object Leecode {
             }
         }
         answer
+    }
+
+    private def expandAroundCenter(s: String, left: Int, right: Int): Int = {
+        var (left0: Int, right0: Int) = (left, right)
+        while (left0 >= 0 && right0 < s.length() && s.charAt(left0) == s.charAt(right0)) {
+            left0 = left0 - 1
+            right0 = right0 + 1
+        }
+        right0 - left0 - 1
+    }
+
+    //005.最长回文子串-中心扩展算法
+    def longestPalindrome02(s: String): String = {
+        if (StringUtils.isBlank(s)) {
+            return StringUtils.EMPTY
+        }
+        var (start, end) = (0, 0)
+        for (i <- 0 until s.length) {
+            val len1 = expandAroundCenter(s, i, i)
+            val len2 = expandAroundCenter(s, i, i + 1)
+            val len = math.max(len1, len2)
+            if (len > end - start) {
+                start = i - (len - 1) / 2
+                end = i + len / 2
+            }
+        }
+        s.substring(start, end + 1)
+    }
+
+    private def expandManacher(s: String, left: Int, right: Int): Int = {
+        var (left0: Int, right0: Int) = (left, right)
+        while (left0 >= 0 && right0 < s.length() && s.charAt(left0) == s.charAt(right0)) {
+            left0 = left0 - 1
+            right0 = right0 + 1
+        }
+        (right0 - left0 - 2) / 2;
+    }
+
+    //005.最长回文子串-Manacher
+    def longestPalindrome03(s: String): String = {
+        var (start, end) = (0, -1)
+        val t = new StringBuffer("#")
+        for (i <- 0 until s.length) {
+            t.append(s.charAt(i))
+            t.append('#')
+        }
+        t.append('#')
+        val s0 = t.toString
+        val arm_len: ListBuffer[Int] = ListBuffer[Int]()
+        var (right, j) = (-1, -1)
+        for (i <- 0 until s0.length) {
+            var cur_arm_len: Int = 0
+            if (right >= i) {
+                val i_sym: Int = j * 2 - i
+                val min_arm_len: Int = Math.min(arm_len(i_sym), right - i)
+                cur_arm_len = expandManacher(s0, i - min_arm_len, i + min_arm_len)
+            } else {
+                cur_arm_len = expandManacher(s0, i, i)
+            }
+            arm_len += cur_arm_len
+            if (i + cur_arm_len > right) {
+                j = i
+                right = i + cur_arm_len
+            }
+            if (cur_arm_len * 2 + 1 > end - start) {
+                start = i - cur_arm_len
+                end = i + cur_arm_len
+            }
+        }
+        val answer: StringBuffer = new StringBuffer()
+        for (i <- start to end) {
+            if (s0.charAt(i) != '#') {
+                answer.append(s0.charAt(i))
+            }
+        }
+        answer.toString
     }
 }
