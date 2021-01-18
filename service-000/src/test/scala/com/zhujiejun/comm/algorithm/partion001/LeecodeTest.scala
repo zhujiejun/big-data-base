@@ -30,10 +30,7 @@ class LeecodeTest {
 
     @After
     def end(): Unit = {
-        println(
-            s"""total time consumption is
-               ${watch.elapsed(TimeUnit.MILLISECONDS)} ms, about
-               ${watch.elapsed(TimeUnit.SECONDS)} second!""")
+        println(s"""total time consumption is ${watch.elapsed(TimeUnit.MILLISECONDS)} ms, about ${watch.elapsed(TimeUnit.SECONDS)} second!""")
     }
 
     //001.两数之和
@@ -58,8 +55,8 @@ class LeecodeTest {
      */
     @Test
     def findMedianSortedArrays(): Unit = {
-        val median = Leecode.findMedianSortedArrays01(num1 = num1, num2 = num2) //二分查找
-        //val median = Leecode.findMedianSortedArrays02(num1 = num1, num2 = num2) //划分数组
+        //val median = Leecode.findMedianSortedArrays01(num1 = num1, num2 = num2) //二分查找
+        val median = Leecode.findMedianSortedArrays02(num1 = num1, num2 = num2) //划分数组
         println(s"---------the median is $median----------")
     }
 

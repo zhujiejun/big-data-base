@@ -3,7 +3,7 @@ package com.zhujiejun.comm.algorithm.partion001
 import scala.collection.mutable
 
 object Leecode {
-    // 001.两数之和
+    //001.两数之和-force
     def twoSum01(nums: Array[Int], target: Int): Array[Int] = {
         val length = nums.length
         for (i <- 0 until length) {
@@ -16,7 +16,7 @@ object Leecode {
         Array(0)
     }
 
-    // 001.两数之和-map
+    //001.两数之和-map
     def twoSum02(nums: Array[Int], target: Int): Array[Int] = {
         val length = nums.length
         var saved: mutable.Map[Int, Int] = mutable.Map()
@@ -30,29 +30,29 @@ object Leecode {
         Array(0)
     }
 
-    // 002.两数相加
+    //002.两数相加
     def addTwoNumbers(l1: List[Int], l2: List[Int]): List[Int] = {
         null
     }
 
-    // 003.无重复字符的最长子串
+    //003.无重复字符的最长子串
     def lengthOfLongestSubstring(s: String): Int = {
         val n = s.length
-        // 哈希集合，记录每个字符是否出现过
+        //哈希集合，记录每个字符是否出现过
         var occ: mutable.Set[Character] = mutable.Set()
-        // 右指针，初始值为 -1，相当于我们在字符串的左边界的左侧，还没有开始移动
+        //右指针，初始值为 -1，相当于我们在字符串的左边界的左侧，还没有开始移动
         var (rk, answer) = (-1, 0)
         for (i <- 0 until n) {
             if (i != 0) {
-                // 左指针向右移动一格，移除一个字符
+                //左指针向右移动一格，移除一个字符
                 occ -= s.charAt(i - 1)
             }
             while (rk + 1 < n && !occ.contains(s.charAt(rk + 1))) {
-                // 不断地移动右指针
+                //不断地移动右指针
                 occ += s.charAt(rk + 1)
                 rk = rk + 1
             }
-            // 第 i 到 rk 个字符是一个极长的无重复字符子串
+            //第 i 到 rk 个字符是一个极长的无重复字符子串
             answer = Math.max(answer, rk - i + 1)
         }
         answer
@@ -74,7 +74,7 @@ object Leecode {
         var (index1, index2) = (0, 0)
         val (length1, length2) = (num1.length, num1.length)
         while (true) {
-            // 边界情况
+            //边界情况
             if (index1 == length1) {
                 return num2(index2 + k0 - 1)
             }
@@ -84,7 +84,7 @@ object Leecode {
             if (k0 == 1) {
                 return Math.min(num1(index1), num2(index2))
             }
-            // 正常情况
+            //正常情况
             val half = k0 / 2
             val newIndex1 = Math.min(index1 + half, length1) - 1
             val newIndex2 = Math.min(index2 + half, length2) - 1
@@ -101,7 +101,7 @@ object Leecode {
         kthElement
     }
 
-    // 004.寻找两个有序数组的中位数-二分查找
+    //004.寻找两个有序数组的中位数-二分查找
     def findMedianSortedArrays01(num1: Array[Int], num2: Array[Int]): Double = {
         val (length1, length2) = (num1.length, num1.length)
         val totalLength = length1 + length2
@@ -116,24 +116,24 @@ object Leecode {
         }
     }
 
-    // 004.寻找两个有序数组的中位数-划分数组
+    //004.寻找两个有序数组的中位数-划分数组
     def findMedianSortedArrays02(num1: Array[Int], num2: Array[Int]): Double = {
         val (length1, length2) = (num1.length, num1.length)
         if (length1 > length2) {
             return findMedianSortedArrays02(num2, num1)
         }
-        // median1：前一部分的最大值
-        // median2：后一部分的最小值
+        //median1：前一部分的最大值
+        //median2：后一部分的最小值
         var (left, right) = (0, length1)
         var (median1, median2) = (0, 0)
         while (left < right) {
-            // 前一部分包含 num1[0 .. i-1] 和 nums2[0 .. j-1]
-            // 后一部分包含 num1[i .. m-1] 和 nums2[j .. n-1]
+            //前一部分包含 num1[0 .. i-1] 和 nums2[0 .. j-1]
+            //后一部分包含 num1[i .. m-1] 和 nums2[j .. n-1]
             val i: Int = (left + right) / 2
             val j: Int = (length1 + length2 + 1) / 2 - i
 
-            // num_im1, num_i, num_jm1, num_j 分别表示
-            // num1[i-1], num1[i], num2[j-1], num2[j]
+            //num_im1, num_i, num_jm1, num_j 分别表示
+            //num1[i-1], num1[i], num2[j-1], num2[j]
             val num_im1 = if (i == 0) Integer.MIN_VALUE else num1(i - 1)
             val num_i = if (i == length1) Integer.MAX_VALUE else num1(i)
             val num_jm1 = if (j == 0) Integer.MIN_VALUE else num2(j - 1)
