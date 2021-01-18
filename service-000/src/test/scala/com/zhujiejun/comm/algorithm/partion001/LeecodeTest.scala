@@ -20,7 +20,7 @@ class LeecodeTest {
     def begin(): Unit = {
         watch = Stopwatch.createStarted()
         target = RandomUtils.nextInt(1, 500)
-        nums = LeecodeUtil.geneIntArray(1, 500, 250)
+        nums = LeecodeUtil.geneIntArray(1, 123456, 12345)
     }
 
     @After
@@ -30,8 +30,8 @@ class LeecodeTest {
 
     @Test
     def twoSum(): Unit = {
-        Leecode.twoSum01(nums = nums, target = target) foreach println
-        //Leecode.twoSum02(nums = nums, target = target) foreach println
+        //Leecode.twoSum01(nums = nums, target = target) foreach println
+        Leecode.twoSum02(nums = nums, target = target) foreach println
     }
 }
 
