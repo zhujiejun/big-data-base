@@ -12,9 +12,9 @@ object Constant {
         "spark.driver.cores" -> "6",
         "spark.driver.memory" -> "512m",
         "spark.executor.cores" -> "6",
-        "spark.executor.memory" -> "2g",
-        "spark.kryoserializer.buffer.max" -> "256m",
-        "spark.serializer" -> "org.apache.spark.serializer.KryoSerializer"
+        "spark.executor.memory" -> "512m",
+//        "spark.kryoserializer.buffer.max" -> "256m",
+//        "spark.serializer" -> "org.apache.spark.serializer.KryoSerializer"
     ).toArray
 }
 
