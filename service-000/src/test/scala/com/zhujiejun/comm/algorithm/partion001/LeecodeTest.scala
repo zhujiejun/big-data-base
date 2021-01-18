@@ -2,13 +2,15 @@ package com.zhujiejun.comm.algorithm.partion001
 
 import com.google.common.base.Stopwatch
 import com.zhujiejun.comm.algorithm.partion001.LeecodeTest._
+import com.zhujiejun.util._
+import org.apache.commons.lang3.RandomUtils
 import org.junit.{After, Before, Test}
 
 import java.util.concurrent.TimeUnit
 
 object LeecodeTest {
-    val target = 6
-    val nums: Array[Int] = Array(1, 3, 4, 5, 7, 8, 9, 0)
+    var target = 6
+    var nums: Array[Int] = Array(1, 3, 4, 5, 7, 8, 9, 0)
 }
 
 class LeecodeTest {
@@ -17,7 +19,8 @@ class LeecodeTest {
     @Before
     def begin(): Unit = {
         watch = Stopwatch.createStarted()
-
+        target = RandomUtils.nextInt(1, 500)
+        nums = LeecodeUtil.geneIntArray(1, 500, 250)
     }
 
     @After
@@ -26,16 +29,9 @@ class LeecodeTest {
     }
 
     @Test
-    def twoSum01(): Unit = {
-
-        val result = Leecode.twoSum01(nums = nums, target = target)
-        result foreach println
-    }
-
-    @Test
-    def twoSum02(): Unit = {
-        val result = Leecode.twoSum02(nums = nums, target = target)
-        result foreach println
+    def twoSum(): Unit = {
+        Leecode.twoSum01(nums = nums, target = target) foreach println
+        //Leecode.twoSum02(nums = nums, target = target) foreach println
     }
 }
 
