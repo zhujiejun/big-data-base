@@ -50,9 +50,6 @@ class LeecodeTest {
     }
 
     //004.寻找两个有序数组的中位数
-    /**
-     *
-     */
     @Test
     def findMedianSortedArrays(): Unit = {
         //val median = Leecode.findMedianSortedArrays01(num1 = num1, num2 = num2) //二分查找
