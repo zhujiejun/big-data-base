@@ -117,4 +117,36 @@ object Leecode {
     }
 
     // 004.寻找两个有序数组的中位数-划分数组
+    def findMedianSortedArrays02(num1: Array[Int], num2: Array[Int]): Double = {
+        val (length1, length2) = (num1.length, num1.length)
+        if (length1 > length2) {
+            return findMedianSortedArrays02(num2, num1)
+        }
+        // median1：前一部分的最大值
+        // median2：后一部分的最小值
+        var (left, right) = (0, length1)
+        var (median1, median2) = (0, 0)
+        while (left < right) {
+            // 前一部分包含 num1[0 .. i-1] 和 nums2[0 .. j-1]
+            // 后一部分包含 num1[i .. m-1] 和 nums2[j .. n-1]
+            val i: Int = (left + right) / 2
+            val j: Int = (length1 + length2 + 1) / 2 - i
+
+            // num_im1, num_i, num_jm1, num_j 分别表示
+            // num1[i-1], num1[i], num2[j-1], num2[j]
+            val num_im1 = if (i == 0) Integer.MIN_VALUE else num1(i - 1)
+            val num_i = if (i == length1) Integer.MAX_VALUE else num1(i)
+            val num_jm1 = if (j == 0) Integer.MIN_VALUE else num2(j - 1)
+            val num_j = if (j == length2) Integer.MIN_VALUE else num2(j)
+
+            if (num_im1 <= num_j) {
+                median1 = Math.max(num_im1, num_jm1)
+                median2 = Math.min(num_i, num_j)
+                left = i + 1
+            } else {
+                right = i - 1
+            }
+        }
+        if ((length1 + length2) % 2 == 0) (median1 + median2) / 2.0 else median1
+    }
 }

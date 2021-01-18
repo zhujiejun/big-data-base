@@ -10,46 +10,56 @@ import java.util.concurrent.TimeUnit
 
 object LeecodeTest {
     var target = 6
+    var str: String = ""
+    var watch: Stopwatch = _
     var nums: Array[Int] = Array(1, 3, 4, 5, 7, 8, 9, 0)
+    var num1: Array[Int] = Array(1, 3, 4, 5, 7, 8, 9, 0)
+    var num2: Array[Int] = Array(1, 3, 4, 5, 7, 8, 9, 0)
 }
 
 class LeecodeTest {
-    var watch: Stopwatch = _
-
     @Before
     def begin(): Unit = {
         watch = Stopwatch.createStarted()
         target = RandomUtils.nextInt(1, 500)
         nums = LeecodeUtil.geneIntArray(1, 123456, 12345)
+        num1 = LeecodeUtil.geneIntArray(1, 123456789, 12345678)
+        num2 = LeecodeUtil.geneIntArray(1, 123456789, 12345678)
+        str = "consumdjshuahdirqqtryrqtysfzafhjgjhsgxgdwhahzteerxwoqhdgxgzfTption"
     }
 
     @After
     def end(): Unit = {
-        println(s"---------total time consumption is ${watch.elapsed(TimeUnit.MILLISECONDS)} ms.---------")
+        println(
+            s"""total time consumption is
+               ${watch.elapsed(TimeUnit.MILLISECONDS)} ms, about
+               ${watch.elapsed(TimeUnit.SECONDS)} second!""")
     }
 
-    // 001.两数之和
+    //001.两数之和
     @Test
     def twoSum(): Unit = {
-        //Leecode.twoSum01(nums = nums, target = target) foreach println //force
-        Leecode.twoSum02(nums = nums, target = target) foreach println //map
+        Leecode.twoSum01(nums = nums, target = target) foreach println //force
+        //Leecode.twoSum02(nums = nums, target = target) foreach println //map
     }
 
-    // 002.两数相加
+    //002.两数相加
     def addTwoNumbers(): Unit = {}
 
-    // 003.无重复字符的最长子串
+    //003.无重复字符的最长子串
     @Test
     def lengthOfLongestSubstring(): Unit = {
-        println(Leecode.lengthOfLongestSubstring("consumdjshuahdirqqtryrqtysfzafhjgjhsgxgdwhahzteerxwoqhdgxgzfTption"))
+        println(Leecode.lengthOfLongestSubstring(str))
     }
 
-    // 004.寻找两个有序数组的中位数
+    //004.寻找两个有序数组的中位数
+    /**
+     *
+     */
     @Test
     def findMedianSortedArrays(): Unit = {
-        //二分查找
-        val median = Leecode.findMedianSortedArrays01(LeecodeUtil.geneIntArray(1, 30, 10),
-            LeecodeUtil.geneIntArray(15, 45, 15))
+        val median = Leecode.findMedianSortedArrays01(num1 = num1, num2 = num2) //二分查找
+        //val median = Leecode.findMedianSortedArrays02(num1 = num1, num2 = num2) //划分数组
         println(s"---------the median is $median----------")
     }
 
