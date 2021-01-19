@@ -2,7 +2,7 @@ package com.zhujiejun.comm.algorithm.partion001
 
 import com.google.common.base.Stopwatch
 import com.zhujiejun.comm.algorithm.partion001.LeecodeTest._
-import com.zhujiejun.util._
+import com.zhujiejun.util.LeecodeUtil
 import org.apache.commons.lang3.RandomUtils
 import org.junit.{After, Before, Test}
 
@@ -33,32 +33,33 @@ class LeecodeTest {
         println(s"""total time consumption is ${watch.elapsed(TimeUnit.MILLISECONDS)} ms, about ${watch.elapsed(TimeUnit.SECONDS)} second!""")
     }
 
-    //001.两数之和
     @Test
+    //001.两数之和
     def twoSum(): Unit = {
         Leecode.twoSum01(nums = nums, target = target) foreach println //force
         //Leecode.twoSum02(nums = nums, target = target) foreach println //map
     }
 
+    @Test
     //002.两数相加
     def addTwoNumbers(): Unit = {}
 
-    //003.无重复字符的最长子串
     @Test
+    //003.无重复字符的最长子串
     def lengthOfLongestSubstring(): Unit = {
         println(Leecode.lengthOfLongestSubstring(str))
     }
 
-    //004.寻找两个有序数组的中位数
     @Test
+    //004.寻找两个有序数组的中位数
     def findMedianSortedArrays(): Unit = {
         //val median = Leecode.findMedianSortedArrays01(num1 = num1, num2 = num2) //二分查找
         val median = Leecode.findMedianSortedArrays02(num1 = num1, num2 = num2) //划分数组
         println(s"---------the median is $median----------")
     }
 
-    //005.最长回文子串
     @Test
+    //005.最长回文子串
     def longestPalindrome(): Unit = {
         //val str1 = Leecode.longestPalindrome01(str) //动态规划
         //val str1 = Leecode.longestPalindrome02(str) //中心扩展
