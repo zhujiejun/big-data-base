@@ -1,6 +1,7 @@
 project(':service-006') {
     dependencies {
         compile project(':service-000')
+        implementation 'com.google.guava:guava:29.0-jre'
         implementation 'org.apache.spark:spark-core_2.12'
         implementation 'org.apache.spark:spark-sql_2.12'
         implementation 'org.apache.spark:spark-streaming_2.12'
