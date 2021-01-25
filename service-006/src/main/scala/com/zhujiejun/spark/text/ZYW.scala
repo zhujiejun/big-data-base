@@ -9,10 +9,10 @@ import java.nio.file.{Files, Paths}
 
 object ZYW {
     def main(args: Array[String]): Unit = {
-        if (Files.isDirectory(Paths.get(savePath))) MoreFiles.deleteRecursively(Paths.get(savePath))
+        if (Files.isDirectory(Paths.get(savepath))) MoreFiles.deleteRecursively(Paths.get(savepath))
         val sparkConfig: SparkConf = new SparkConf().setAppName("ZYW").setMaster("local[*]")
         val spark = SparkSession.builder().config(sparkConfig).getOrCreate()
-        val file = spark.sparkContext.textFile(zywPath).repartition(1)
+        val file = spark.sparkContext.textFile(zywspath).repartition(1)
 
         file.map { line =>
             val newline = line.replaceFirst(gxyjr, s"$gxyjr${dformat.format(count)}")
@@ -20,7 +20,7 @@ object ZYW {
             newline
         }.sortBy(f = { line =>
             line.split(" ")(3)
-        }, ascending = true).saveAsTextFile(savePath)
+        }, ascending = true).saveAsTextFile(savepath)
 
         spark.close()
     }
