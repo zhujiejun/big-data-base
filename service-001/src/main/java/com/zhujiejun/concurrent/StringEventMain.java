@@ -1,6 +1,5 @@
 package com.zhujiejun.concurrent;
 
-import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.YieldingWaitStrategy;
@@ -17,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 @Slf4j
+@SuppressWarnings("all")
 public class StringEventMain {
 
     private static final Executor executor = Executors.newFixedThreadPool(3);
@@ -34,7 +34,7 @@ public class StringEventMain {
 
         return (event, sequence, endOfBatch) -> {
             try {
-                TimeUnit.SECONDS.sleep(RandomUtils.nextInt(1, 5));
+                TimeUnit.MILLISECONDS.sleep(RandomUtils.nextInt(100, 500));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -57,7 +57,7 @@ public class StringEventMain {
         RingBuffer<StringEvent> ringBuffer = disruptor.getRingBuffer();
 
         disruptor.start();
-        IntStream.rangeClosed(1, 10).forEach(i -> {
+        IntStream.rangeClosed(1, 5).forEach(i -> {
             String initString = RandomStringUtils.randomAlphabetic(1 << 4);
             ringBuffer.publishEvent((event, sequence, buffer) -> event.setValue(initString));
             try {
@@ -66,5 +66,10 @@ public class StringEventMain {
                 e.printStackTrace();
             }
         });
+        try {
+            TimeUnit.MILLISECONDS.sleep(Integer.MAX_VALUE);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
