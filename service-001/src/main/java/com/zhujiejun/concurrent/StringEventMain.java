@@ -3,6 +3,7 @@ package com.zhujiejun.concurrent;
 import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
@@ -10,15 +11,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 @Slf4j
 public class StringEventMain {
 
+    private static final Executor executor = Executors.newFixedThreadPool(3);
+
     private static EventHandler<StringEvent> show(String msg) {
         return (event, sequence, endOfBatch) ->
-                log.info("----------{} string is: [{}]----------", msg, event.getValue());
+                log.info("=========={} string is: [{}]============", msg, event.getValue());
     }
 
     private static EventHandler<StringEvent> delimit(String delimiter) {
@@ -29,7 +34,7 @@ public class StringEventMain {
 
         return (event, sequence, endOfBatch) -> {
             try {
-                TimeUnit.SECONDS.sleep(RandomUtils.nextInt(1, 10));
+                TimeUnit.SECONDS.sleep(RandomUtils.nextInt(1, 5));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -38,9 +43,9 @@ public class StringEventMain {
     }
 
     public static void main(String[] args) {
-        int bufferSize = 1 << 10;
+        int bufferSize = 1 << 12;
         Disruptor<StringEvent> disruptor = new Disruptor<>(StringEvent::new, bufferSize,
-                DaemonThreadFactory.INSTANCE, ProducerType.MULTI, new BlockingWaitStrategy());
+                DaemonThreadFactory.INSTANCE, ProducerType.MULTI, new YieldingWaitStrategy());
 
         disruptor.handleEventsWith(show("initiated"))
                 .then(delimit("|"))
@@ -48,6 +53,7 @@ public class StringEventMain {
                 .then(delimit("|"))
                 .then(handle("-D"), handle("-E"), handle("-F"))
                 .then(show("processed"));
+
         RingBuffer<StringEvent> ringBuffer = disruptor.getRingBuffer();
 
         disruptor.start();
@@ -55,7 +61,7 @@ public class StringEventMain {
             String initString = RandomStringUtils.randomAlphabetic(1 << 4);
             ringBuffer.publishEvent((event, sequence, buffer) -> event.setValue(initString));
             try {
-                TimeUnit.SECONDS.sleep(RandomUtils.nextInt(3, 5));
+                TimeUnit.SECONDS.sleep(RandomUtils.nextInt(1, 5));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
