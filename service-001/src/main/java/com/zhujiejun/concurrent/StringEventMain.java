@@ -21,7 +21,7 @@ public class StringEventMain {
     private static final Executor executor = Executors.newFixedThreadPool(3);
 
     private static EventHandler<StringEvent> show(String msg) {
-        log.info("==========1.current thread is {}==========", Thread.currentThread().toString());
+        log.info("==========1.current thread is: {}==========", Thread.currentThread().toString());
         return (event, sequence, endOfBatch) ->
                 log.info("=========={} string is: [{}]============{}",
                         msg, event.getValue(),
@@ -29,14 +29,14 @@ public class StringEventMain {
     }
 
     private static EventHandler<StringEvent> delimit(String delimiter) {
-        log.info("==========2.current thread is {}==========", Thread.currentThread().toString());
+        log.info("==========2.current thread is: {}==========", Thread.currentThread().toString());
         return (event, sequence, endOfBatch) -> event.setValue(event.getValue().concat(delimiter));
     }
 
     private static EventHandler<StringEvent> handle(String suffix) {
 
         return (event, sequence, endOfBatch) -> {
-            log.info("3.==========current thread is {}==========", Thread.currentThread().toString());
+            log.info("==========3.current thread is: {}==========", Thread.currentThread().toString());
             try {
                 TimeUnit.MILLISECONDS.sleep(RandomUtils.nextInt(100, 500));
             } catch (InterruptedException e) {
