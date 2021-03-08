@@ -1,7 +1,6 @@
 package com.zhujiejun.concurrent;
 
 import com.lmax.disruptor.EventHandler;
-import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
@@ -54,12 +53,12 @@ public class StringEventMain {
                 .then(handle("-D"), handle("-E"), handle("-F"))
                 .then(show("processed"));
 
-        RingBuffer<StringEvent> ringBuffer = disruptor.getRingBuffer();
-
         disruptor.start();
+        //RingBuffer<StringEvent> ringBuffer = disruptor.getRingBuffer();
         IntStream.rangeClosed(1, 5).forEach(i -> {
             String initString = RandomStringUtils.randomAlphabetic(1 << 4);
-            ringBuffer.publishEvent((event, sequence, buffer) -> event.setValue(initString));
+            //ringBuffer.publishEvent((event, sequence, buffer) -> event.setValue(initString));
+            disruptor.publishEvent((event, sequence) -> event.setValue(initString));
             try {
                 TimeUnit.SECONDS.sleep(RandomUtils.nextInt(1, 5));
             } catch (InterruptedException e) {
