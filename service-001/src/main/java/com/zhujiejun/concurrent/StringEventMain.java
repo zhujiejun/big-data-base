@@ -8,6 +8,7 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -22,7 +23,9 @@ public class StringEventMain {
 
     private static EventHandler<StringEvent> show(String msg) {
         return (event, sequence, endOfBatch) ->
-                log.info("=========={} string is: [{}]============", msg, event.getValue());
+                log.info("=========={} string is: [{}]============{}",
+                        msg, event.getValue(),
+                        StringUtils.equals(msg, "processed") ? "\n" : "");
     }
 
     private static EventHandler<StringEvent> delimit(String delimiter) {
@@ -48,9 +51,11 @@ public class StringEventMain {
 
         disruptor.handleEventsWith(show("initiated"))
                 .then(delimit("|"))
-                .then(handle("-A"), handle("-B"), handle("-C"))
+                .then(handle("-A"), handle("-B"))
                 .then(delimit("|"))
-                .then(handle("-D"), handle("-E"), handle("-F"))
+                .then(handle("-C"), handle("-D"))
+                .then(delimit("|"))
+                .then(handle("-E"), handle("-F"))
                 .then(show("processed"));
 
         disruptor.start();
