@@ -16,12 +16,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 @Slf4j
-@SuppressWarnings("all")
 public class StringEventMain {
 
     private static final Executor executor = Executors.newFixedThreadPool(3);
 
     private static EventHandler<StringEvent> show(String msg) {
+        log.info("==========1.current thread is {}==========", Thread.currentThread().toString());
         return (event, sequence, endOfBatch) ->
                 log.info("=========={} string is: [{}]============{}",
                         msg, event.getValue(),
@@ -29,12 +29,14 @@ public class StringEventMain {
     }
 
     private static EventHandler<StringEvent> delimit(String delimiter) {
+        log.info("==========2.current thread is {}==========", Thread.currentThread().toString());
         return (event, sequence, endOfBatch) -> event.setValue(event.getValue().concat(delimiter));
     }
 
     private static EventHandler<StringEvent> handle(String suffix) {
 
         return (event, sequence, endOfBatch) -> {
+            log.info("3.==========current thread is {}==========", Thread.currentThread().toString());
             try {
                 TimeUnit.MILLISECONDS.sleep(RandomUtils.nextInt(100, 500));
             } catch (InterruptedException e) {
@@ -60,7 +62,7 @@ public class StringEventMain {
 
         disruptor.start();
         //RingBuffer<StringEvent> ringBuffer = disruptor.getRingBuffer();
-        IntStream.rangeClosed(1, 5).forEach(i -> {
+        IntStream.rangeClosed(1, 2).forEach(i -> {
             String initString = RandomStringUtils.randomAlphabetic(1 << 4);
             //ringBuffer.publishEvent((event, sequence, buffer) -> event.setValue(initString));
             disruptor.publishEvent((event, sequence) -> event.setValue(initString));
