@@ -63,7 +63,7 @@ public class StringEventMain {
 
         disruptor.start();
 
-        IntStream.rangeClosed(1, 1).forEach(i -> {
+        IntStream.rangeClosed(1, 2).forEach(i -> {
             String initString = RandomStringUtils.randomAlphabetic(1 << 5);
             disruptor.publishEvent((event, sequence) -> event.setValue(initString));
             /*try {
