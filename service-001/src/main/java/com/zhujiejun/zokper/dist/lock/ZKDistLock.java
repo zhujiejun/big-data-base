@@ -68,6 +68,7 @@ public class ZKDistLock implements Lock {
                         this.creatingSemaphore = null;
                     }
                     zookeeper.create(path, StringUtils.EMPTY.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
+                    log.info("threadId-{}创建临时节点成功", Thread.currentThread().getId());
                     return true;
                 } catch (KeeperException | InterruptedException ex) {
                     log.error("threadId-{}查看临时节点时异常", Thread.currentThread().getId(), ex);
