@@ -1,8 +1,9 @@
 package com.zhujiejun.zokper.dist.lock;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.zookeeper.CreateMode;
-import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.ZooKeeper;
@@ -27,13 +28,21 @@ public class ZkDistLock implements Lock {
 
     public ZkDistLock() {
         try {
-            this.zookeeper = new ZooKeeper(connectString, sessionTimeout, new ZookeeperWatcher());
+            this.zookeeper = new ZooKeeper(connectString, sessionTimeout, event -> {
+                log.info("接收到事件: {}, threadId-{}", event.getState(), Thread.currentThread().getId());
+                if (Watcher.Event.KeeperState.SyncConnected == event.getState()) {
+                    connectedSemaphore.countDown();
+                }
+                if (creatingSemaphore != null) {
+                    creatingSemaphore.countDown();
+                }
+            });
             try {
                 connectedSemaphore.await();
             } catch (InterruptedException e) {
-                log.error("等待Zookeeper成功建立连接的过程中,线程抛出异常", e);
+                log.error("与Zookeeper成功建立连接的过程中,线程抛出异常", e);
             }
-            log.info("与Zookeeper成功建立连接");
+            log.info("与Zookeeper建立连接成功");
         } catch (Exception e) {
             log.error("与Zookeeper建立连接时出现异常", e);
         }
@@ -44,11 +53,11 @@ public class ZkDistLock implements Lock {
     public boolean lock(Long lockId) {
         String path = "/product-lock-" + lockId;
         try {
-            zookeeper.create(path, "".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
-            log.info("ThreadId={}创建临时节点成功", Thread.currentThread().getId());
+            zookeeper.create(path, StringUtils.EMPTY.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
+            log.info("threadId-{}创建临时节点成功", Thread.currentThread().getId());
             return true;
-        } catch (Exception e) {
-            // 若临时节点已存在,则会抛出异常: NodeExistsException        
+        } catch (KeeperException | InterruptedException e) {
+            // 若临时节点已存在,则会抛出异常: KeeperException | InterruptedException
             while (true) {
                 // 相当于给znode注册了一个监听器,查看监听器是否存在            
                 try {
@@ -58,10 +67,10 @@ public class ZkDistLock implements Lock {
                         boolean await = this.creatingSemaphore.await(DISTRIBUTED_KEY_OVERDUE_TIME, TimeUnit.MILLISECONDS);
                         this.creatingSemaphore = null;
                     }
-                    zookeeper.create(path, "".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
+                    zookeeper.create(path, StringUtils.EMPTY.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
                     return true;
                 } catch (Exception ex) {
-                    log.error("ThreadId={},查看临时节点时出现异常", Thread.currentThread().getId(), ex);
+                    log.error("threadId-{}查看临时节点时异常", Thread.currentThread().getId(), ex);
                 }
             }
         }
@@ -75,22 +84,9 @@ public class ZkDistLock implements Lock {
             // 第二个参数version是数据版本 每次znode内数据发生变化,都会使version自增,
             // 但由于分布式锁创建的临时znode没有存数据,因此version=-1        
             zookeeper.delete(path, -1);
-            log.info("释放分布式锁成功, lockId={}, ThreadId={}", lockId, Thread.currentThread().getId());
+            log.info("threadId-{}释放分布式锁成功, lockId={}, ", Thread.currentThread().getId(), lockId);
         } catch (Exception e) {
-            log.error("释放分布式锁失败,lockId={}", lockId, e);
-        }
-    }
-
-    private class ZookeeperWatcher implements Watcher {
-        @Override
-        public void process(WatchedEvent event) {
-            log.info("接收到事件: {}, ThreadId={}", event.getState(), Thread.currentThread().getId());
-            if (Event.KeeperState.SyncConnected == event.getState()) {
-                connectedSemaphore.countDown();
-            }
-            if (creatingSemaphore != null) {
-                creatingSemaphore.countDown();
-            }
+            log.error("threadId-{}释放分布式锁失败, lockId={}", lockId, e);
         }
     }
 }
