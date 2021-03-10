@@ -15,11 +15,11 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class ZKDistLock implements Lock {
     //Zookeeper客户端
-    private ZooKeeper zookeeper;
+    public ZooKeeper zookeeper;
     //创建分布式锁的过程中,开始和等待请求创建分布式锁的信号标志
-    private CountDownLatch creatingSemaphore;
+    private CountDownLatch creatingFlag;
     //与Zookeeper成功建立连接的信号标志
-    private final CountDownLatch connectedSemaphore = new CountDownLatch(1);
+    private final CountDownLatch connectedFlag = new CountDownLatch(1);
     //分布式锁的过期时间 单位:毫秒
     private static final Long DISTRIBUTED_KEY_OVERDUE_TIME = 30000L;
     //Zookeeper集群连接信息
@@ -31,14 +31,14 @@ public class ZKDistLock implements Lock {
             this.zookeeper = new ZooKeeper(connectString, sessionTimeout, event -> {
                 log.info("接收到事件: {}, threadId-{}", event.getState(), Thread.currentThread().getId());
                 if (Watcher.Event.KeeperState.SyncConnected == event.getState()) {
-                    connectedSemaphore.countDown();
+                    connectedFlag.countDown();
                 }
-                if (creatingSemaphore != null) {
-                    creatingSemaphore.countDown();
+                if (creatingFlag != null) {
+                    creatingFlag.countDown();
                 }
             });
             try {
-                connectedSemaphore.await();
+                connectedFlag.await();
             } catch (InterruptedException e) {
                 log.error("与Zookeeper成功建立连接的过程中,线程抛出异常", e);
             }
@@ -63,9 +63,9 @@ public class ZKDistLock implements Lock {
                 try {
                     Stat stat = zookeeper.exists(path, true);
                     if (stat != null) {
-                        this.creatingSemaphore = new CountDownLatch(1);
-                        this.creatingSemaphore.await(DISTRIBUTED_KEY_OVERDUE_TIME, TimeUnit.MILLISECONDS);
-                        this.creatingSemaphore = null;
+                        this.creatingFlag = new CountDownLatch(1);
+                        this.creatingFlag.await(DISTRIBUTED_KEY_OVERDUE_TIME, TimeUnit.MILLISECONDS);
+                        this.creatingFlag = null;
                     }
                     zookeeper.create(path, StringUtils.EMPTY.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
                     log.info("threadId-{}创建临时节点成功", Thread.currentThread().getId());
