@@ -40,11 +40,11 @@ public class ZKDistLock implements Lock {
             try {
                 connectedFlag.await();
             } catch (InterruptedException e) {
-                log.error("与Zookeeper成功建立连接的过程中,线程抛出异常", e);
+                log.error("[与Zookeeper成功建立连接的过程中,线程抛出异常]");
             }
             log.info("与Zookeeper建立连接成功");
         } catch (Exception e) {
-            log.error("与Zookeeper建立连接时出现异常", e);
+            log.error("[与Zookeeper建立连接时出现异常]");
         }
     }
 
@@ -71,7 +71,7 @@ public class ZKDistLock implements Lock {
                     log.info("threadId-{}创建临时节点成功", Thread.currentThread().getId());
                     return true;
                 } catch (KeeperException | InterruptedException ex) {
-                    log.error("threadId-{}查看临时节点时异常", Thread.currentThread().getId(), ex);
+                    log.error("threadId-{}[查看临时节点时异常]", Thread.currentThread().getId());
                 }
             }
         }
