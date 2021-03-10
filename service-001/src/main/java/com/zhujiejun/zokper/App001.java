@@ -1,7 +1,7 @@
 package com.zhujiejun.zokper;
 
 import com.zhujiejun.zokper.dist.lock.Lock;
-import com.zhujiejun.zokper.dist.lock.ZkDistLock;
+import com.zhujiejun.zokper.dist.lock.ZKDistLock;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.math.RandomUtils;
 
@@ -12,7 +12,7 @@ public class App001 {
     public static void main(String[] args) throws InterruptedException {
         long lockId = 20200730;
         new Thread(() -> {
-            Lock zkDistLock = new ZkDistLock();
+            Lock zkDistLock = new ZKDistLock();
             log.info("threadId-{}获取到分布式锁:{}", Thread.currentThread().getId(), zkDistLock.lock(lockId));
             try {
                 TimeUnit.SECONDS.sleep(RandomUtils.nextInt(5));
@@ -23,7 +23,7 @@ public class App001 {
         }).start();
         TimeUnit.SECONDS.sleep(1);
         new Thread(() -> {
-            Lock zkDistLock = new ZkDistLock();
+            Lock zkDistLock = new ZKDistLock();
             log.info("threadId-{}获取到分布式锁:{}", Thread.currentThread().getId(), zkDistLock.lock(lockId));
             try {
                 TimeUnit.SECONDS.sleep(RandomUtils.nextInt(5));

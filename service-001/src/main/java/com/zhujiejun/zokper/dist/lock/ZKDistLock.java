@@ -13,7 +13,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-public class ZkDistLock implements Lock {
+public class ZKDistLock implements Lock {
     //Zookeeper客户端
     private ZooKeeper zookeeper;
     //创建分布式锁的过程中,开始和等待请求创建分布式锁的信号标志
@@ -26,7 +26,7 @@ public class ZkDistLock implements Lock {
     private static final int sessionTimeout = 5000;
     private static final String connectString = "node101:2181,node101:2181,node102:2181,node103:2181";
 
-    public ZkDistLock() {
+    public ZKDistLock() {
         try {
             this.zookeeper = new ZooKeeper(connectString, sessionTimeout, event -> {
                 log.info("接收到事件: {}, threadId-{}", event.getState(), Thread.currentThread().getId());
@@ -69,7 +69,7 @@ public class ZkDistLock implements Lock {
                     }
                     zookeeper.create(path, StringUtils.EMPTY.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
                     return true;
-                } catch (Exception ex) {
+                } catch (KeeperException | InterruptedException ex) {
                     log.error("threadId-{}查看临时节点时异常", Thread.currentThread().getId(), ex);
                 }
             }
@@ -85,7 +85,7 @@ public class ZkDistLock implements Lock {
             // 但由于分布式锁创建的临时znode没有存数据,因此version=-1        
             zookeeper.delete(path, -1);
             log.info("threadId-{}释放分布式锁成功, lockId={}, ", Thread.currentThread().getId(), lockId);
-        } catch (Exception e) {
+        } catch (InterruptedException | KeeperException e) {
             log.error("threadId-{}释放分布式锁失败, lockId={}", lockId, e);
         }
     }
