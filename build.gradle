@@ -55,7 +55,7 @@ subprojects {
         testImplementation "junit:junit:${junitVersion}"
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
         implementation "org.slf4j:slf4j-log4j12:${slf4jversion}"
-        //implementation "com.google.guava:guava:${guavaVersion}"
+        implementation "com.google.guava:guava:${guavaVersion}"
         implementation "org.scala-lang:scala-library:${scalaVersion}"
         annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
         //implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
