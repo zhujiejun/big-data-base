@@ -13,12 +13,12 @@ public class App001 {
 
         new Thread(() -> {
             Lock zkDistLock = new ZkDistLock();
-            System.out.println("ThreadId1=" + Thread.currentThread().getId());
-            System.out.println("ThreadId=" + Thread.currentThread().getId() + "获取到分布式锁: " + zkDistLock.lock(lockId));
+            log.info("Thread1={}", Thread.currentThread().getId());
+            log.info("current thread={}获取到分布式锁:{}", Thread.currentThread().getId(), zkDistLock.lock(lockId));
             try {
                 TimeUnit.SECONDS.sleep(5);
             } catch (InterruptedException e) {
-                log.error("ThreadId=" + Thread.currentThread().getId() + "暂停时出现异常", e);
+                log.error("Thread1={}暂停时出现异常", Thread.currentThread().getId() + "", e);
             }
             zkDistLock.unlock(lockId);
         }).start();
@@ -27,8 +27,8 @@ public class App001 {
 
         new Thread(() -> {
             Lock zkDistLock = new ZkDistLock();
-            System.out.println("ThreadId2=" + Thread.currentThread().getId());
-            System.out.println("ThreadId=" + Thread.currentThread().getId() + "获取到分布式锁: " + zkDistLock.lock(lockId));
+            log.info("Thread2={}", Thread.currentThread().getId());
+            log.info("current thread={}获取到分布式锁:{}", Thread.currentThread().getId(), zkDistLock.lock(lockId));
         }).start();
     }
 }
