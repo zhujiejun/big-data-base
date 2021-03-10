@@ -64,7 +64,7 @@ public class ZkDistLock implements Lock {
                     Stat stat = zookeeper.exists(path, true);
                     if (stat != null) {
                         this.creatingSemaphore = new CountDownLatch(1);
-                        boolean await = this.creatingSemaphore.await(DISTRIBUTED_KEY_OVERDUE_TIME, TimeUnit.MILLISECONDS);
+                        this.creatingSemaphore.await(DISTRIBUTED_KEY_OVERDUE_TIME, TimeUnit.MILLISECONDS);
                         this.creatingSemaphore = null;
                     }
                     zookeeper.create(path, StringUtils.EMPTY.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
