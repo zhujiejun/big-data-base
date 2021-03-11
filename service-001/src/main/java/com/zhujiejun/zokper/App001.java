@@ -83,11 +83,11 @@ public class App001 {
         if (zookeeper.exists(ORDER_PATH, false) == null) {
             zookeeper.create(ORDER_PATH, StringUtils.EMPTY.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
         }
-        zookeeper.setData(ORDER_PATH, "0".getBytes(), -1);
+        //zookeeper.setData(ORDER_PATH, "0".getBytes(), -1);
         //IntStream.rangeClosed(1, 100).forEach(i -> new Thread(() -> increment(new ZKDistLock(), cntLockId), "thread-" + i).start());
-        IntStream.rangeClosed(1, 100).forEach(i -> new Thread(() -> {
+        IntStream.rangeClosed(1, 32).forEach(i -> new Thread(() -> {
             String orderNumber = getOrderNumber(new ZKDistLock(), orderLockId);
-            log.info("=========the current order number is {}========", orderNumber);
+            log.warn("=========the current order number is {}========", orderNumber);
         }, "thread-" + i).start());
     }
 }
