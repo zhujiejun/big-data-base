@@ -63,8 +63,8 @@ public class GroupChatClient {
                         String msg = new String(buffer.array());
                         System.out.println(msg.trim());
                     }
-                    iterator.remove(); //删除当前的selectionKey, 防止重复操作
                 }
+                iterator.remove(); //删除当前的selectionKey, 防止重复操作
             } else {
                 System.out.println("没有可以用的通道...");
             }
