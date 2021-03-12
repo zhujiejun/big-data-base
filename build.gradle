@@ -49,15 +49,17 @@ subprojects {
         scalaVersion = '2.12.12'
         guavaVersion = '29.0-jre'
         lombokVersion = '1.18.16'
+        commonsLangVersion = "3.9"
     }
 
     dependencies {
         testImplementation "junit:junit:${junitVersion}"
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
         implementation "org.slf4j:slf4j-log4j12:${slf4jversion}"
-        //implementation "com.google.guava:guava:${guavaVersion}"
+        implementation "com.google.guava:guava:${guavaVersion}"
         implementation "org.scala-lang:scala-library:${scalaVersion}"
         annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        implementation "org.apache.commons:commons-lang3:${commonsLangVersion}"
         //implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     }
 

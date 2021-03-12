@@ -1,0 +1,7 @@
+project(':service-002') {
+    dependencies {
+        implementation project(':service-000')
+        implementation 'io.netty:netty-all:4.1.60.Final'
+    }
+}
+//mainClassName = 'com.zhujiejun.netty.App002'
