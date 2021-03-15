@@ -1,7 +1,5 @@
 project(':service-000') {
     dependencies {
-        implementation 'com.google.guava:guava:29.0-jre'
-        implementation 'org.apache.commons:commons-lang3:3.9'
     }
 }
-//mainClassName = 'com.zhujiejun.spark.App001'
+//mainClassName = 'com.zhujiejun.spark.App000'
