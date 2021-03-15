@@ -4,4 +4,4 @@ project(':service-000') {
         implementation 'org.apache.commons:commons-lang3:3.9'
     }
 }
-//mainClassName = 'com.zhujiejun.spark.App001'
+//mainClassName = 'com.zhujiejun.spark.App000'

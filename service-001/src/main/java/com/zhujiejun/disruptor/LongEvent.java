@@ -1,4 +1,4 @@
-package com.zhujiejun.concurrent;
+package com.zhujiejun.disruptor;
 
 public class LongEvent {
     private long value;

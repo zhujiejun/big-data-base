@@ -1,4 +1,4 @@
-package com.zhujiejun.concurrent;
+package com.zhujiejun.disruptor;
 
 import lombok.Data;
 

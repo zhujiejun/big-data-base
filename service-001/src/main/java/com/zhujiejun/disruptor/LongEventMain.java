@@ -1,4 +1,4 @@
-package com.zhujiejun.concurrent;
+package com.zhujiejun.disruptor;
 
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
