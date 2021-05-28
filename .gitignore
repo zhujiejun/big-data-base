@@ -6,4 +6,4 @@ build
 
 .idea
 .DS_Store
-gradle/wrapper/gradle-7.0-bin.zip
+gradle
