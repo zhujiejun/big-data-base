@@ -24,9 +24,7 @@ allprojects {
         maven { url "https://maven.aliyun.com/repository/spring-plugin" }
         maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
     }
-}
 
-subprojects {
     apply plugin: 'idea'
     apply plugin: 'java'
     apply plugin: 'scala'
@@ -34,8 +32,6 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
 
     ext {
-        //scala2.11.12--spark2.4.5
-        //scala2.12.12--spark3.0.0
         junitVersion = '4.13'
         log4jVersion = '1.2.17'
         slf4jversion = '1.7.30'
@@ -46,10 +42,12 @@ subprojects {
         sparkVersion = '3.0.0'
         jacksonVersion = '2.9.8'
         elasticVersion = '7.9.3'
-        scalaVersion = '2.12.12'
+        scalaVersion = '2.13.5'
         guavaVersion = '29.0-jre'
         lombokVersion = '1.18.16'
         commonsLangVersion = "3.9"
+        //scala2.11.12--spark.2.4.5
+        //scala2.12.12--spark.3.0.0
     }
 
     dependencies {
@@ -81,8 +79,8 @@ subprojects {
             dependency "org.apache.spark:spark-kubernetes_2.12:${sparkVersion}"
             dependency "org.apache.spark:spark-streaming-kafka-0-10_2.12:${sparkVersion}"
             //elasticsearch
-            // dependency "org.elasticsearch.client:transport:${elasticVersion}"
-            // dependency "org.elasticsearch:elasticsearch-spark-20_2.11:${elasticVersion}"
+            //dependency "org.elasticsearch.client:transport:${elasticVersion}"
+            //dependency "org.elasticsearch:elasticsearch-spark-20_2.11:${elasticVersion}"
         }
     }
 }
