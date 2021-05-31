@@ -29,7 +29,6 @@ class Module001Test {
         val node6 = new ListNode(5, node5)
 
         var node = addTwoNumbers001(node3, node6)
-
         do {
             println(s"===========the value is ${node.value}==========")
         } while (node.hasNext())
