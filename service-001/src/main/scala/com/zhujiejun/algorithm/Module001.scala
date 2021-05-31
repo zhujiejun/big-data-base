@@ -66,5 +66,35 @@ object Module001 {
         }
         ans
     }
+
+    //寻找两个有序数组的中位数
+    def findMedianSortedArrays002(nums1: Array[Int], nums2: Array[Int]): Double = {
+        if (nums1.length > nums2.length) return findMedianSortedArrays002(nums2, nums1)
+        val m = nums1.length
+        val n = nums2.length
+        var left = 0
+        var right = m
+        // median1：前一部分的最大值
+        // median2：后一部分的最小值
+        var median1 = 0
+        var median2 = 0
+        while (left <= right) {
+            // 前一部分包含 nums1[0 .. i-1] 和 nums2[0 .. j-1]
+            // 后一部分包含 nums1[i .. m-1] 和 nums2[j .. n-1]
+            val i = (left + right) / 2
+            val j = (m + n + 1) / 2 - i
+            // nums_im1, nums_i, nums_jm1, nums_j 分别表示 nums1[i-1], nums1[i], nums2[j-1], nums2[j]
+            val nums_im1 = if (i == 0) Integer.MIN_VALUE else nums1(i - 1)
+            val nums_i = if (i == m) Integer.MAX_VALUE else nums1(i)
+            val nums_jm1 = if (j == 0) Integer.MIN_VALUE else nums2(j - 1)
+            val nums_j = if (j == n) Integer.MAX_VALUE else nums2(j)
+            if (nums_im1 <= nums_j) {
+                median1 = Math.max(nums_im1, nums_jm1)
+                median2 = Math.min(nums_i, nums_j)
+                left = i + 1
+            } else right = i - 1
+        }
+        if ((m + n) % 2 == 0) (median1 + median2) / 2.0 else median1
+    }
 }
 

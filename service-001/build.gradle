@@ -1,3 +1,6 @@
 project(':service-001') {
-    mainClassName='com.zhujiejun.module.Module001'
+    dependencies {
+        implementation project(":service-000")
+    }
+    mainClassName = 'com.zhujiejun.module.Module001'
 }
